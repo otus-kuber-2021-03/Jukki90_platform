@@ -13,3 +13,7 @@ spec:
       port: 80
       protocol: TCP
       targetPort: 80
+    - name: nginx-exporter
+      port: 9113
+      protocol: TCP
+      targetPort: 9113
