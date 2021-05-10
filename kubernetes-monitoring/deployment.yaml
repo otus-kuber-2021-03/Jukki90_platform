@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: nginx
+          image: jukki90/nginx-for-monitoring:1
+          ports:
+            - containerPort: 80
+        - name: nginx-prometheus-exporter
+          image: nginx/nginx-prometheus-exporter:latest
+          env:
+            - name: SCRAPE_URI
+              value: "http://127.0.0.1:80/basic_status"
+            - name: NGINX_RETRIES
+              value: "10"
+          ports:
+            - name: prometheus
+              containerPort: 9113
